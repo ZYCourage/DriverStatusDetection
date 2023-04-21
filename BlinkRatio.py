@@ -11,7 +11,7 @@ frame_counter = 0
 CEF_COUNTER = 0
 TOTAL_BLINKS = 0\
 # constants
-THRESHOLD = 0.6  # 关键参数1，闭眼与睁眼的阈值调整，越大越不容易检测
+THRESHOLD = 0.3  # 关键参数1，闭眼与睁眼的阈值调整，越大越不容易检测
 CLOSED_EYES_FRAME = 1  # 关键参数2，闭眼的帧数，越大判定的时间越久
 FONTS = cv.FONT_HERSHEY_COMPLEX
 
