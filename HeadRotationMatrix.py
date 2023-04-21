@@ -25,16 +25,71 @@ def rotation_matrix_to_angles(rotation_matrix):
     return np.array([x, y, z]) * 180. / math.pi
 
 
-while cap.isOpened():
-    success, image = cap.read()
+# while cap.isOpened():
+#     success, image = cap.read()
+#
+#     # Convert the color space from BGR to RGB and get Mediapipe results
+#     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+#     results = face_mesh.process(image)
+#
+#     # Convert the color space from RGB to BGR to display well with Opencv
+#     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+#
+#     face_coordination_in_real_world = np.array([
+#         [285, 528, 200],
+#         [285, 371, 152],
+#         [197, 574, 128],
+#         [173, 425, 108],
+#         [360, 574, 128],
+#         [391, 425, 108]
+#     ], dtype=np.float64)
+#
+#     h, w, _ = image.shape
+#     face_coordination_in_image = []
+#
+#     if results.multi_face_landmarks:
+#         for face_landmarks in results.multi_face_landmarks:
+#             for idx, lm in enumerate(face_landmarks.landmark):
+#                 if idx in [1, 9, 57, 130, 287, 359]:
+#                     x, y = int(lm.x * w), int(lm.y * h)
+#                     face_coordination_in_image.append([x, y])
+#
+#             face_coordination_in_image = np.array(face_coordination_in_image,
+#                                                   dtype=np.float64)
+#
+#             # The camera matrix
+#             focal_length = 1 * w
+#             cam_matrix = np.array([[focal_length, 0, w / 2],
+#                                    [0, focal_length, h / 2],
+#                                    [0, 0, 1]])
+#
+#             # The Distance Matrix
+#             dist_matrix = np.zeros((4, 1), dtype=np.float64)
+#
+#             # Use solvePnP function to get rotation vector
+#             success, rotation_vec, transition_vec = cv2.solvePnP(
+#                 face_coordination_in_real_world, face_coordination_in_image,
+#                 cam_matrix, dist_matrix)
+#
+#             # Use Rodrigues function to convert rotation vector to matrix
+#             rotation_matrix, jacobian = cv2.Rodrigues(rotation_vec)
+#
+#             result = rotation_matrix_to_angles(rotation_matrix)
+#             for i, info in enumerate(zip(('pitch', 'yaw', 'roll'), result)):
+#                 k, v = info
+#                 text = f'{k}: {int(v)}'
+#                 cv2.putText(image, text, (20, i*30 + 20),
+#                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 0, 200), 2)
+#
+#
+#     cv2.imshow('Head Pose Angles', image)
+#
+#     if cv2.waitKey(5) & 0xFF == 27:
+#         break
+#
+# cap.release()
 
-    # Convert the color space from BGR to RGB and get Mediapipe results
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    results = face_mesh.process(image)
-
-    # Convert the color space from RGB to BGR to display well with Opencv
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
+def HeadRotation(image,results):
     face_coordination_in_real_world = np.array([
         [285, 528, 200],
         [285, 371, 152],
@@ -78,16 +133,8 @@ while cap.isOpened():
             for i, info in enumerate(zip(('pitch', 'yaw', 'roll'), result)):
                 k, v = info
                 text = f'{k}: {int(v)}'
-                cv2.putText(image, text, (20, i*30 + 20),
+                cv2.putText(image, text, (20, i * 30 + 20),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 0, 200), 2)
-
-
-    cv2.imshow('Head Pose Angles', image)
-
-    if cv2.waitKey(5) & 0xFF == 27:
-        break
-
-cap.release()
 
 # # Path: HeadRotationMatrix.py
 # if __name__ == '__main__':

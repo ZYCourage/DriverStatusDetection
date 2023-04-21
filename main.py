@@ -9,6 +9,8 @@ from ultralytics.yolo.cfg import get_cfg
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMenu
 from PySide6.QtGui import QImage, QPixmap, QColor
 from PySide6.QtCore import QTimer, QThread, Signal, QObject, QPoint, Qt
+
+import HeadRotationMatrix
 from ui.CustomMessageBox import MessageBox
 from ui.home import Ui_MainWindow
 from UIFunctions import *
@@ -415,6 +417,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             frame = cv2.cvtColor(img_src_, cv2.COLOR_BGR2RGB)
             with BlinkRatio.map_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5) as face_mesh:
                 results = face_mesh.process(frame)
+                HeadRotationMatrix.HeadRotation(frame, results)
                 if results.multi_face_landmarks:
                     mesh_coords = BlinkRatio.landmarksDetection(img_src_, results, False)
                     ratio = BlinkRatio.blinkRatio(img_src_, mesh_coords, BlinkRatio.RIGHT_EYE, BlinkRatio.LEFT_EYE)
