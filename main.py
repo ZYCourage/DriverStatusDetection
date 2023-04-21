@@ -51,7 +51,7 @@ class YoloPredictor(BasePredictor, QObject):
     yolo2main_progress = Signal(int)         # Completeness
     yolo2main_class_num = Signal(int)        # Number of categories detected
     yolo2main_target_num = Signal(int)       # Targets detected
-
+    total_blinks = Signal(int)                # Number of blinks
     def __init__(self, cfg=DEFAULT_CFG, overrides=None):
         super(YoloPredictor, self).__init__() 
         QObject.__init__(self)
@@ -215,7 +215,8 @@ class YoloPredictor(BasePredictor, QObject):
                         self.yolo2main_res_img.emit(im0) # after detection
                         self.yolo2main_pre_img.emit(im0s if isinstance(im0s, np.ndarray) else im0s[0])   # Before testing
                         # self.yolo2main_labels.emit(self.labels_dict)        # webcam need to change the def write_results
-                        self.yolo2main_class_num.emit(class_nums)
+                        #czy
+                        self.yolo2main_class_num.emit(TOTAL_BLINKS)
                         self.yolo2main_target_num.emit(target_nums)
 
                         if self.speed_thres != 0:
