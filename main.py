@@ -39,6 +39,8 @@ TOTAL_BLINKS = 0
 THRESHOLD = 0.6  # 关键参数1，闭眼与睁眼的阈值调整，越大越不容易检测
 CLOSED_EYES_FRAME = 1  # 关键参数2，闭眼的帧数，越大判定的时间越久
 # -----------------------------
+def get_blinks():
+    return TOTAL_BLINKS
 
 class YoloPredictor(BasePredictor, QObject):
     yolo2main_pre_img = Signal(np.ndarray)   # raw image signal
@@ -352,9 +354,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.yolo_predict.yolo2main_res_img.connect(lambda x: self.show_image(x, self.res_video))
         self.yolo_predict.yolo2main_status_msg.connect(lambda x: self.show_status(x))             
         self.yolo_predict.yolo2main_fps.connect(lambda x: self.fps_label.setText(x))              
-        # self.yolo_predict.yolo2main_labels.connect(self.show_labels)                            
-        self.yolo_predict.yolo2main_class_num.connect(lambda x:self.Class_num.setText(str(x)))         
-        self.yolo_predict.yolo2main_target_num.connect(lambda x:self.Target_num.setText(str(x)))       
+        # self.yolo_predict.yolo2main_labels.connect(self.show_labels)
+        # czy
+        self.yolo_predict.yolo2main_class_num.connect(lambda x:self.Class_num.setText(str(x)))
+        #
+        # self.Class_num.setText(str(TOTAL_BLINKS))
+        self.yolo_predict.yolo2main_target_num.connect(lambda x:self.Target_num.setText(str(x)))
         self.yolo_predict.yolo2main_progress.connect(lambda x: self.progress_bar.setValue(x))     
         self.main2yolo_begin_sgl.connect(self.yolo_predict.run)     
         self.yolo_predict.moveToThread(self.yolo_thread)              
@@ -638,7 +643,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.save_txt_button.setCheckState(Qt.CheckState(save_txt)) 
         self.yolo_predict.save_txt = (False if save_txt==0 else True )
         self.run_button.setChecked(False)  
-        self.show_status("Welcome~")
+        self.show_status("Welcome")
 
     # Terminate button and associated state
     def stop(self):
