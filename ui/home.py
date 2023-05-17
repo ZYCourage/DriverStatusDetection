@@ -853,26 +853,43 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addWidget(self.run_button)
 
+# progress bar
         self.progress_bar = QProgressBar(self.Pause_QF)
         self.progress_bar.setObjectName(u"progress_bar")
         self.progress_bar.setMinimumSize(QSize(0, 20))
         self.progress_bar.setMaximumSize(QSize(16777215, 20))
         self.progress_bar.setStyleSheet(u"QProgressBar{ \n"
-"font: 700 10pt \"Microsoft YaHei UI\";\n"
-"color: rgb(253, 143, 134); \n"
+"font: 0 0pt \"Microsoft YaHei UI\";\n"
+"color: rgb(255, 255, 255); \n"
 "text-align:center; \n"
-"border:3px solid rgb(255, 255, 255);\n"
-"border-radius: 10px; \n"
-"background-color: rgba(215, 215, 215,100);\n"
+"border:0px solid rgb(255, 255, 255);\n"
+"border-radius: 0px; \n"
+"background-color: rgba(255, 255, 255,0);\n"
 "} \n"
 "\n"
 "QProgressBar:chunk{ \n"
 "border-radius:0px; \n"
-"background: rgba(119, 111, 252, 200);\n"
-"border-radius: 7px;\n"
+"background: rgba(255, 255, 255, 0);\n"
+"border-radius: 0px;\n"
 "}")
+
+        # "font: 700 10pt \"Microsoft YaHei UI\";\n"
+        # "color: rgb(253, 143, 134); \n"
+        # "text-align:center; \n"
+        # "border:3px solid rgb(255, 255, 255);\n"
+        # "border-radius: 10px; \n"
+        # "background-color: rgba(215, 215, 215,100);\n"
+        # "} \n"
+        # "\n"
+        # "QProgressBar:chunk{ \n"
+        # "border-radius:0px; \n"
+        # "background: rgba(119, 111, 252, 200);\n"
+        # "border-radius: 7px;\n"
+        # "}")
+
         self.progress_bar.setMaximum(1000)
         self.progress_bar.setValue(0)
+# progress bar
 
         self.horizontalLayout_4.addWidget(self.progress_bar)
 

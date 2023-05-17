@@ -36,6 +36,8 @@ from utils_blink_ratio import utils as utils_blink_ratio
 # face_mesh = map_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 CEF_COUNTER = 0
 TOTAL_BLINKS = 0
+TimeCounter = 0
+TimeCounter_Start = 0
 THRESHOLD = 0.6  # 关键参数1，闭眼与睁眼的阈值调整，越大越不容易检测
 CLOSED_EYES_FRAME = 1  # 关键参数2，闭眼的帧数，越大判定的时间越久
 # -----------------------------
@@ -217,7 +219,8 @@ class YoloPredictor(BasePredictor, QObject):
                         # self.yolo2main_labels.emit(self.labels_dict)        # webcam need to change the def write_results
                         #czy
                         self.yolo2main_class_num.emit(TOTAL_BLINKS)
-                        self.yolo2main_target_num.emit(target_nums)
+                        # emit TimeCounter
+                        self.yolo2main_target_num.emit(TimeCounter)
 
                         if self.speed_thres != 0:
                             time.sleep(self.speed_thres/1000)   # delay , ms
@@ -401,7 +404,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # The main window displays the original image and detection results
     @staticmethod
     def show_image(img_src, label):
-        global CEF_COUNTER, TOTAL_BLINKS
+
+        global CEF_COUNTER, TOTAL_BLINKS, TimeCounter ,TimeCounter_Start
+
+        if time.time() - TimeCounter_Start > 23:
+            TimeCounter = 0
+        if time.time() - TimeCounter_Start > 35:
+            TimeCounter = 0
         ratiolist = [4, 4, 4, 4, 4]
         try:
             ih, iw, _ = img_src.shape
@@ -424,6 +433,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             with BlinkRatio.map_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5) as face_mesh:
                 results = face_mesh.process(frame)
                 HeadRotationMatrix.HeadRotation(frame, results)
+                # perclos check
                 if results.multi_face_landmarks:
                     mesh_coords = BlinkRatio.landmarksDetection(img_src_, results, False)
                     ratio = BlinkRatio.blinkRatio(img_src_, mesh_coords, BlinkRatio.RIGHT_EYE, BlinkRatio.LEFT_EYE)
@@ -439,7 +449,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                             CEF_COUNTER = 0
                     ratiolist.pop(0)
                     ratiolist.append(ratio)
-                    utils_blink_ratio.colorBackgroundText(frame, f'Total Blinks: {TOTAL_BLINKS}', BlinkRatio.FONTS, 0.7, (30, 150), 2)
+                    # utils_blink_ratio.colorBackgroundText(frame, f'Total Blinks: {TOTAL_BLINKS}', BlinkRatio.FONTS, 0.7, (30, 150), 2)
 
             img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[2] * frame.shape[1],
                          QImage.Format_RGB888)
@@ -450,8 +460,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # Control start/pause
     def run_or_continue(self):
-        global CEF_COUNTER, TOTAL_BLINKS
-        CEF_COUNTER, TOTAL_BLINKS = 0, 0
+
+        # TimeCounter = 0
+        global CEF_COUNTER, TOTAL_BLINKS, TimeCounter, TimeCounter_Start
+        CEF_COUNTER, TOTAL_BLINKS, TimeCounter = 0, 0, 0
+        TimeCounter_Start = time.time()
+
         if self.yolo_predict.source == '':
             self.show_status('Please select a video source before starting detection...')
             self.run_button.setChecked(False)

@@ -12,7 +12,7 @@ CEF_COUNTER = 0
 TOTAL_BLINKS = 0\
 # constants
 THRESHOLD = 0.3  # 关键参数1，闭眼与睁眼的阈值调整，越大越不容易检测
-CLOSED_EYES_FRAME = 1  # 关键参数2，闭眼的帧数，越大判定的时间越久
+CLOSED_EYES_FRAME = 2  # 关键参数2，闭眼的帧数，越大判定的时间越久
 FONTS = cv.FONT_HERSHEY_COMPLEX
 
 
@@ -136,6 +136,30 @@ def frameCounter(media):
             if key == ord('q') or key == ord('Q'):
                 break
         cv.destroyAllWindows()
+
+# def percolos_check(frame, result):
+#     # 承接
+#     # frame = cv2.cvtColor(img_src_, cv2.COLOR_BGR2RGB)
+#     # with BlinkRatio.map_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5) as face_mesh:
+#     #     results = face_mesh.process(frame)
+#     from_time = time.time()
+#     time_slice = 30000
+#     ratiolist = [4, 4, 4, 4, 4]
+#     if result.multi_face_landmarks:
+#         # 参数
+#         mesh_coords = landmarksDetection(frame, result, False)
+#         ratio = blinkRatio(frame, mesh_coords, RIGHT_EYE, LEFT_EYEBROW)
+#         ave = mean(ratiolist)
+#         # if 闭眼
+#         if ratio > ave + THRESHOLD:
+#             close_start_time = time.time()
+#             # utils.colorBackgroundText(frame, f'Blink', FONTS, 1.7, (50, 100), 2, utils.WHITE, utils.YELLOW)
+#         else:
+#
+#         ratiolist.pop(0)
+#         ratiolist.append(ratio)
+#         # utils.colorBackgroundText(frame, f'Total Blinks: {TOTAL_BLINKS}', FONTS, 0.7, (30, 150), 2)
+#         return ratio
 
 if __name__ == '__main__':
     media = cv.VideoCapture("czy test.mp4")
